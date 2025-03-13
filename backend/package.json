@@ -1,7 +1,7 @@
 {
   "name": "gdsc_main",
   "version": "1.0.0",
-  "main": "feedback.js",
+  "main": "database.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,7 +15,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "fast-two-sms": "^1.0.4",
     "mysql": "^2.18.1",
     "mysql2": "^3.13.0",
     "twilio": "^5.5.0"
