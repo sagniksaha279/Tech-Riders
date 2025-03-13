@@ -62,8 +62,23 @@ function closeContent(content){
     overlay.classList.remove('active')
 }
 
-//feedback function
-function check(){
-    let str = document.getElementById('feedback').value
-    console.log(str)
-}
+//feedback
+document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("feedback").value;
+
+    fetch("http://localhost:3000/submit-feedback", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        document.getElementById("feedbackForm").reset();
+    })
+    .catch(error => console.error("Error:", error));
+});
