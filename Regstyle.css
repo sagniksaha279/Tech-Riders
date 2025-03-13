@@ -67,3 +67,48 @@ button:hover{
     box-shadow: 2px 2px 10px black;
     transition: box-shadow 1s 0.2ms ease-in;
 }
+
+@media (max-width: 886px) {
+    .register-user {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        width: 90%;
+        height: auto;
+        margin-top: 50px;
+        padding: 10px;
+    }
+
+    #second-image,
+    #third-image {
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+
+    #second-button,
+    #third-button {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button {
+        font-size: 18px;
+        width: 100%;
+        padding: 10px;
+        text-align: center;
+    }
+}
