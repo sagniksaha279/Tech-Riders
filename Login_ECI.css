@@ -49,3 +49,32 @@ body{
 .container #submit-btn{
     margin-right: -20px;
 }
+
+
+/* Responsive Styles */
+@media (max-width: 886px) {
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .container {
+        width: 90%;
+        left: auto;
+        top: auto;
+        margin: 20px auto;
+    }
+
+    .container h6 {
+        font-size: 22px;
+    }
+
+    .container .log-pass label {
+        font-size: 18px;
+    }
+
+    .container button {
+        font-size: 16px;
+    }
+}
