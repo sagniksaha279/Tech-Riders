@@ -3,9 +3,16 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const twilio = require("twilio");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Twilio Client
+const twilioClient = twilio(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+);
 
 // Middleware
 app.use(cors());
@@ -52,7 +59,7 @@ app.post("/login", (req, res) => {
 app.post("/check-epic", (req, res) => {
     const { EPIC_no } = req.body;
     
-    db.query("SELECT name, FatherName, voted, city FROM details WHERE EPIC_no = ?", [EPIC_no], (err, results) => {
+    db.query("SELECT name, FatherName, voted, city, phoneNumber FROM details WHERE EPIC_no = ?", [EPIC_no], (err, results) => {
         if (err) {
             console.error("❌ Error executing query:", err);
             return res.status(500).json({ success: false, message: "Database error" });
@@ -60,7 +67,7 @@ app.post("/check-epic", (req, res) => {
         
         if (results.length > 0) {
             const user = results[0];
-            
+
             if (user.voted) {
                 res.json({
                     success: false,
@@ -73,13 +80,31 @@ app.post("/check-epic", (req, res) => {
                         console.error("❌ Error updating voted status:", updateErr);
                         return res.status(500).json({ success: false, message: "Error updating vote status" });
                     }
-                    
+
+                    // Send SMS Notification
+                    if (user.phoneNumber) {
+                        const messageBody = `Dear ${user.name}, your vote has been successfully registered in ${user.city}. Thank you for participating in Voting! 🗳️`;
+
+                        twilioClient.messages.create({
+                            body: messageBody,
+                            from: process.env.TWILIO_PHONE_NUMBER,
+                            to: user.phoneNumber 
+                        })
+                        .then(() => {
+                            console.log("📩 SMS sent successfully to", user.phoneNumber);
+                        })
+                        .catch((smsErr) => {
+                            console.error("❌ Error sending SMS:", smsErr);
+                        });
+                    }
+
                     res.json({
                         success: true,
                         name: user.name,   
                         father_name: user.FatherName,  
                         city: user.city,
-                        message: "🗳️ Vote Registered Successfully!"
+                        phoneNumber:user.phoneNumber,
+                        message: "🗳️ Vote Registered Successfully! and SMS notification sent."
                     });
                 });
             }
@@ -107,8 +132,8 @@ app.post("/submit-feedback", (req, res) => {
     });
 });
 
+
 // Start Server
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
