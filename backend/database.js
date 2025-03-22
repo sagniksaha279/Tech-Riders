@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const twilio = require("twilio");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.DB_PORT || 3000;
 
 // Twilio Client
 const twilioClient = twilio(
@@ -21,12 +21,13 @@ app.use(bodyParser.json());
 
 // Database Connection
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "1234", 
-    database: "SmartVote",
-    port: 3306
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 });
+
 
 db.connect(err => {
     if (err) {
