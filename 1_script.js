@@ -4,8 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const downloadOptions = document.getElementById("download-options");
     const closeButton = document.querySelector("[data-icon-close]");
 
-    iconButton.addEventListener("click", () => {
-        downloadOptions.classList.add("active");
+    iconButton.addEventListener("click", (event) => {
+        event.stopPropagation(); // Prevent click from being caught by document listener
+        downloadOptions.classList.toggle("active");
     });
 
     closeButton.addEventListener("click", () => {
@@ -17,6 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!downloadOptions.contains(event.target) && event.target !== iconButton) {
             downloadOptions.classList.remove("active");
         }
+    });
+
+    // Prevent closing when clicking inside the download options
+    downloadOptions.addEventListener("click", (event) => {
+        event.stopPropagation();
     });
 });
 
@@ -68,7 +74,7 @@ document.getElementById("feedbackForm").addEventListener("submit", function(even
 
     const message = document.getElementById("feedback").value;
 
-    fetch("http://localhost:3000/submit-feedback", {
+    fetch("http://localhost:3000/submit-feedback", { //change
         method: "POST",
         headers: {
             "Content-Type": "application/json"
